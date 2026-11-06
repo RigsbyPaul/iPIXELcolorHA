@@ -620,3 +620,8 @@ connection and every reply from the panel.
 * Rainbow modes 2 to 9 are presets in the panel's firmware, so how they look
   depends on the panel.
 
+
+## With thanks
+
+* With thanks to original solution by https://github.com/lucagoc/pypixelcolor
+
