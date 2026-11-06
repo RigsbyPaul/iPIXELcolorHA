@@ -1,0 +1,371 @@
+display_text:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    message:
+      required: true
+      example: "Dinner is ready"
+      selector:
+        text:
+    color:
+      selector:
+        color_rgb:
+    background_color:
+      selector:
+        color_rgb:
+    speed:
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+          mode: slider
+    effect:
+      selector:
+        select:
+          translation_key: effect
+          options:
+            - "0"
+            - "1"
+            - "2"
+            - "5"
+            - "6"
+            - "7"
+    rainbow_mode:
+      selector:
+        number:
+          min: 0
+          max: 9
+          step: 1
+          mode: box
+    save_slot:
+      selector:
+        number:
+          min: 1
+          max: 10
+          step: 1
+          mode: box
+display_image:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    file:
+      example: "/config/www/matrix/logo.png"
+      selector:
+        text:
+    url:
+      example: "https://example.com/animation.gif"
+      selector:
+        text:
+          type: url
+    resize:
+      selector:
+        select:
+          translation_key: resize
+          options:
+            - "fit"
+            - "crop"
+            - "stretch"
+    background_color:
+      selector:
+        color_rgb:
+    save_slot:
+      selector:
+        number:
+          min: 1
+          max: 10
+          step: 1
+          mode: box
+    hide_loading:
+      default: false
+      selector:
+        boolean:
+    live:
+      default: false
+      selector:
+        boolean:
+display_graph:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    values:
+      example: "[0, 2, 5, 7, 7, 4, 0]"
+      selector:
+        object:
+    points:
+      example: "[[0, 1.2], [15, 3.4], [60, 2.0]]"
+      selector:
+        object:
+    series:
+      example: '[{"points": [[0, 1], [60, 3]], "color": [255, 0, 0]}]'
+      selector:
+        object:
+    style:
+      selector:
+        select:
+          translation_key: graph_style
+          options:
+            - "bar"
+            - "line"
+            - "dots"
+    color:
+      selector:
+        color_rgb:
+    background_color:
+      selector:
+        color_rgb:
+    x_min:
+      selector:
+        number:
+          step: any
+          mode: box
+    x_max:
+      selector:
+        number:
+          step: any
+          mode: box
+    y_min:
+      selector:
+        number:
+          step: any
+          mode: box
+    y_max:
+      selector:
+        number:
+          step: any
+          mode: box
+    maximum:
+      selector:
+        number:
+          min: 0
+          step: any
+          mode: box
+    label:
+      example: "Trixsy 3h"
+      selector:
+        text:
+    save_slot:
+      selector:
+        number:
+          min: 1
+          max: 10
+          step: 1
+          mode: box
+    hide_loading:
+      default: false
+      selector:
+        boolean:
+    live:
+      default: false
+      selector:
+        boolean:
+display_random_pixels:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    steps:
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 50
+          step: 1
+          mode: box
+    duration:
+      default: 200
+      selector:
+        number:
+          min: 20
+          max: 10000
+          step: 10
+          mode: box
+          unit_of_measurement: ms
+    colors:
+      default: 4
+      selector:
+        number:
+          min: 2
+          max: 256
+          step: 1
+          mode: box
+    block_size:
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 32
+          step: 1
+          mode: box
+          unit_of_measurement: px
+    save_slot:
+      selector:
+        number:
+          min: 1
+          max: 10
+          step: 1
+          mode: box
+    hide_loading:
+      default: false
+      selector:
+        boolean:
+draw_pixels:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    points:
+      example: "[[0, 0], [1, 1], [2, 2]]"
+      selector:
+        object:
+    rectangles:
+      example: "[[0, 30, 95, 31]]"
+      selector:
+        object:
+    color:
+      selector:
+        color_rgb:
+    clear:
+      default: false
+      selector:
+        boolean:
+draw_frame:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    layers:
+      required: true
+      example: '[{"color": [30, 30, 30], "rectangles": [[0, 8, 143, 23]]}, {"color": [255, 255, 255], "text": "42%", "x": 191, "y": 16, "anchor": "rm"}]'
+      selector:
+        object:
+    background_color:
+      selector:
+        color_rgb:
+    save_slot:
+      selector:
+        number:
+          min: 1
+          max: 10
+          step: 1
+          mode: box
+    hide_loading:
+      default: true
+      selector:
+        boolean:
+    live:
+      default: false
+      selector:
+        boolean:
+show_clock:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    style:
+      required: true
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 9
+          step: 1
+          mode: box
+    use_24h:
+      default: true
+      selector:
+        boolean:
+    show_date:
+      default: true
+      selector:
+        boolean:
+countdown:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    command:
+      required: true
+      default: "start"
+      selector:
+        select:
+          translation_key: timer_command
+          options:
+            - "start"
+            - "pause"
+            - "resume"
+            - "reset"
+    minutes:
+      default: 5
+      selector:
+        number:
+          min: 0
+          max: 90
+          step: 1
+          mode: box
+          unit_of_measurement: min
+    seconds:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 59
+          step: 1
+          mode: box
+          unit_of_measurement: s
+stopwatch:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    command:
+      required: true
+      default: "start"
+      selector:
+        select:
+          translation_key: timer_command
+          options:
+            - "start"
+            - "pause"
+            - "resume"
+            - "reset"
+delete_slots:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text
+  fields:
+    slots:
+      required: true
+      example: "[2, 3]"
+      selector:
+        select:
+          multiple: true
+          options:
+            - "1"
+            - "2"
+            - "3"
+            - "4"
+            - "5"
+            - "6"
+            - "7"
+            - "8"
+            - "9"
+            - "10"
+delete_all:
+  target:
+    entity:
+      integration: ipixelfriollo
+      domain: text

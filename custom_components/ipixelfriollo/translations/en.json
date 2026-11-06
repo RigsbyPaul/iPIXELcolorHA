@@ -1,0 +1,445 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "description": "Choose an iPixel LED matrix that Home Assistant can currently see over Bluetooth.",
+        "data": {
+          "address": "Device"
+        }
+      },
+      "bluetooth_confirm": {
+        "description": "Set up {name}?"
+      },
+      "size": {
+        "title": "Panel size",
+        "description": "{detected}",
+        "data": {
+          "height": "Display height",
+          "width": "Display width"
+        },
+        "data_description": {
+          "height": "Height of the matrix in pixels. Text is drawn at 16 or 32 pixels high.",
+          "width": "Width of the matrix in pixels. Pictures are resized to this."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This matrix is already configured.",
+      "no_devices_found": "No iPixel matrices (named LED_BLE_…) are in Bluetooth range.",
+      "not_supported": "This Bluetooth device is not an iPixel matrix."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Message defaults",
+        "description": "Used when the Message entity is set. The display_text action can override each one.",
+        "data": {
+          "height": "Display height",
+          "width": "Display width",
+          "connect_via": "Connect via",
+          "keep_connected": "Keep connected",
+          "idle_disconnect": "Disconnect when idle",
+          "font_path": "Font file",
+          "color": "Text colour",
+          "speed": "Scroll speed",
+          "effect": "Animation",
+          "rainbow_mode": "Rainbow mode",
+          "save_slot": "Save slot"
+        },
+        "data_description": {
+          "width": "Width of the matrix in pixels. Pictures are resized to this.",
+          "connect_via": "Bluetooth adapter or ESPHome Bluetooth proxy to reach the matrix through. Automatic uses whichever has the best signal.",
+          "keep_connected": "Keep the Bluetooth connection open between sends, so the matrix does not show its connecting icon each time and updates start sooner. While connected, the phone app cannot reach the matrix.",
+          "idle_disconnect": "Minutes with nothing sent before a kept connection is closed, freeing the matrix for the phone app. 0 never disconnects.",
+          "font_path": "Optional full path to a .ttf or .otf file, for example /config/fonts/MyFont.ttf. Leave empty for the built-in font.",
+          "effect": "How the text moves on the matrix.",
+          "rainbow_mode": "0 or 1 shows the text in its solid colour; 2 to 9 are rainbow presets.",
+          "save_slot": "Program slot on the matrix that the message is stored in."
+        }
+      }
+    },
+    "error": {
+      "invalid_font": "The font file could not be loaded."
+    }
+  },
+  "selector": {
+    "height": {
+      "options": {
+        "16": "16 pixels",
+        "32": "32 pixels"
+      }
+    },
+    "effect": {
+      "options": {
+        "0": "Fixed",
+        "1": "Scroll left",
+        "2": "Scroll right",
+        "5": "Blink",
+        "6": "Breath",
+        "7": "Snowflakes"
+      }
+    },
+    "resize": {
+      "options": {
+        "fit": "Fit (whole picture, padded)",
+        "crop": "Crop (fill the panel)",
+        "stretch": "Stretch (fill, ignore aspect ratio)"
+      }
+    },
+    "graph_style": {
+      "options": {
+        "bar": "Bar",
+        "line": "Line",
+        "dots": "Dots"
+      }
+    },
+    "timer_command": {
+      "options": {
+        "start": "Start",
+        "pause": "Pause",
+        "resume": "Resume",
+        "reset": "Reset"
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "sync_time": {
+        "name": "Sync time"
+      }
+    },
+    "switch": {
+      "upside_down": {
+        "name": "Upside down"
+      }
+    },
+    "text": {
+      "message": {
+        "name": "Message"
+      }
+    }
+  },
+  "services": {
+    "display_text": {
+      "name": "Display text",
+      "description": "Shows a message on the LED matrix.",
+      "fields": {
+        "message": {
+          "name": "Message",
+          "description": "Text to show. Line breaks become spaces."
+        },
+        "color": {
+          "name": "Text colour",
+          "description": "Colour of the text. Defaults to the colour in the integration's options."
+        },
+        "background_color": {
+          "name": "Background colour",
+          "description": "Background colour. Leave empty for no background."
+        },
+        "speed": {
+          "name": "Scroll speed",
+          "description": "Animation speed from 0 to 100."
+        },
+        "effect": {
+          "name": "Animation",
+          "description": "How the text moves. Defaults to the animation in the integration's options (scroll left unless changed)."
+        },
+        "rainbow_mode": {
+          "name": "Rainbow mode",
+          "description": "0 or 1 shows the text in its solid colour; 2 to 9 are rainbow presets."
+        },
+        "save_slot": {
+          "name": "Save slot",
+          "description": "Program slot on the matrix that the message is stored in (1 to 10)."
+        }
+      }
+    },
+    "display_image": {
+      "name": "Display image",
+      "description": "Shows a picture or animated GIF on the LED matrix, resized to fit it.",
+      "fields": {
+        "file": {
+          "name": "File",
+          "description": "Path of a picture on the Home Assistant host, in /config/www or another allowed folder. PNG, JPEG, BMP, GIF and WebP work. Give a file or a URL."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Web address of a picture to download. Give a file or a URL."
+        },
+        "resize": {
+          "name": "Resize",
+          "description": "How the picture is fitted to the panel. Defaults to Fit."
+        },
+        "background_color": {
+          "name": "Background colour",
+          "description": "Colour for transparent areas and for the padding in Fit mode. Defaults to black."
+        },
+        "save_slot": {
+          "name": "Save slot",
+          "description": "Program slot on the matrix that the picture is stored in (1 to 10)."
+        },
+        "hide_loading": {
+          "name": "Hide loading",
+          "description": "Set the panel's brightness to 0 while the picture is sent, then put it back, so the panel's own loading animation is not seen."
+        },
+        "live": {
+          "name": "Live",
+          "description": "Show the picture straight away as a live frame instead of saving it in a slot (like the app's camera mode). Only the first frame of an animation is shown, and save slot and hide loading are not used."
+        }
+      }
+    },
+    "display_graph": {
+      "name": "Display graph",
+      "description": "Draws a list of numbers as a bar graph, or x-y points as a line or dot graph, scaled to fill the LED matrix.",
+      "fields": {
+        "values": {
+          "name": "Values",
+          "description": "Numbers to plot evenly spaced, oldest on the left, for example [0, 2, 5, 7]. Up to 1024. As bars, negative values count as 0. Give only one of values, points and series."
+        },
+        "points": {
+          "name": "Points",
+          "description": "x-y pairs to plot, for example [[0, 1.2], [15, 3.4], [60, 2.0]]. Up to 1024."
+        },
+        "series": {
+          "name": "Series",
+          "description": "Several sets of points, up to 8, each a mapping with points and an optional color, for example [{\"points\": [[0, 1], [60, 3]], \"color\": [255, 0, 0]}]."
+        },
+        "style": {
+          "name": "Style",
+          "description": "Bar (the default for values), line (the default for points and series) or dots. Points and series cannot be drawn as bars."
+        },
+        "color": {
+          "name": "Colour",
+          "description": "Colour of the bars or line. Defaults to the text colour in the integration's options."
+        },
+        "background_color": {
+          "name": "Background colour",
+          "description": "Colour behind the graph. Defaults to black."
+        },
+        "x_min": {
+          "name": "X minimum",
+          "description": "x value at the left edge. Defaults to the smallest x. Not used for bars."
+        },
+        "x_max": {
+          "name": "X maximum",
+          "description": "x value at the right edge. Defaults to the largest x. Not used for bars."
+        },
+        "y_min": {
+          "name": "Y minimum",
+          "description": "y value at the bottom. Defaults to the smallest y. Bars always start at 0."
+        },
+        "y_max": {
+          "name": "Y maximum",
+          "description": "y value at the top. Defaults to the largest y. Points outside the range are drawn at its edge."
+        },
+        "maximum": {
+          "name": "Maximum",
+          "description": "Older name for Y maximum. Give only one of the two."
+        },
+        "label": {
+          "name": "Label",
+          "description": "Optional short text shown in a strip above the graph."
+        },
+        "save_slot": {
+          "name": "Save slot",
+          "description": "Program slot on the matrix that the graph is stored in (1 to 10)."
+        },
+        "hide_loading": {
+          "name": "Hide loading",
+          "description": "Set the panel's brightness to 0 while the picture is sent, then put it back, so the panel's own loading animation is not seen."
+        },
+        "live": {
+          "name": "Live",
+          "description": "Show the picture straight away as a live frame instead of saving it in a slot (like the app's camera mode). save slot and hide loading are not used."
+        }
+      }
+    },
+    "display_random_pixels": {
+      "name": "Display random pixels",
+      "description": "Fills the LED matrix with pixels or squares in bright random colours that change at each step of a looping animation.",
+      "fields": {
+        "steps": {
+          "name": "Steps",
+          "description": "Number of different random pictures in the animation (1 to 50)."
+        },
+        "duration": {
+          "name": "Step duration",
+          "description": "How long each picture is shown, in milliseconds (20 to 10000)."
+        },
+        "colors": {
+          "name": "Colours",
+          "description": "How many bright colours the pixels use (2 to 256, default 4), spread evenly round the colour wheel from a random start. Random pixels hardly compress, so fewer colours send faster. Through an ESPHome proxy, 10 steps on a 192 x 32 panel take about 11 s with 2 colours, 20 s with 4 and 41 s with 16."
+        },
+        "block_size": {
+          "name": "Block size",
+          "description": "Size of each random-colour square in pixels (1 to 32). 1 colours every pixel separately, 2 uses 2 x 2 squares, and so on. Bigger blocks also make a smaller animation that sends faster."
+        },
+        "save_slot": {
+          "name": "Save slot",
+          "description": "Program slot on the matrix that the animation is stored in (1 to 10)."
+        },
+        "hide_loading": {
+          "name": "Hide loading",
+          "description": "Set the panel's brightness to 0 while the picture is sent, then put it back, so the panel's own loading animation is not seen."
+        }
+      }
+    },
+    "draw_pixels": {
+      "name": "Draw pixels",
+      "description": "Colours single pixels on the LED matrix live, using its drawing mode. Much less data than a picture, so it shows almost at once.",
+      "fields": {
+        "points": {
+          "name": "Points",
+          "description": "Pixels to colour as [x, y] pairs, for example [[0, 0], [5, 3]]. x runs 0 to width - 1 from the left, y 0 to height - 1 from the top."
+        },
+        "rectangles": {
+          "name": "Rectangles",
+          "description": "Filled rectangles to colour as [x1, y1, x2, y2] corners (both included), for example [[0, 30, 95, 31]] for a bar along the bottom."
+        },
+        "color": {
+          "name": "Colour",
+          "description": "Colour of the pixels. Black [0, 0, 0] turns them off. Defaults to the text colour in the integration's options."
+        },
+        "clear": {
+          "name": "Clear first",
+          "description": "Clear the whole panel before drawing. Off draws over what is already shown."
+        }
+      }
+    },
+    "draw_frame": {
+      "name": "Draw frame",
+      "description": "Paints several coloured layers of rectangles, pixels and text into one picture and sends it in one go, so the panel changes from the old picture to the new one at once.",
+      "fields": {
+        "layers": {
+          "name": "Layers",
+          "description": "Up to 32 layers, painted in order. Each has color [R, G, B] and any of rectangles ([x1, y1, x2, y2] corners, both included), points ([x, y] pairs), and text with x, y, size and anchor (l/m/r then a/m/s, for example rm)."
+        },
+        "background_color": {
+          "name": "Background colour",
+          "description": "Colour behind the layers. Defaults to black."
+        },
+        "save_slot": {
+          "name": "Save slot",
+          "description": "Slot 1 to 10 the picture is saved to. Defaults to the save slot in the integration's options."
+        },
+        "hide_loading": {
+          "name": "Hide loading screen",
+          "description": "Keep the old picture showing while the new one is sent, instead of the panel's loading screen."
+        },
+        "live": {
+          "name": "Live",
+          "description": "Send it as a live frame instead of saving it to a slot."
+        }
+      }
+    },
+    "show_clock": {
+      "name": "Show clock",
+      "description": "Sets the matrix's time from Home Assistant and switches it to its built-in clock.",
+      "fields": {
+        "style": {
+          "name": "Style",
+          "description": "Clock design, 1 to 9."
+        },
+        "use_24h": {
+          "name": "24-hour",
+          "description": "Show the time in 24-hour format."
+        },
+        "show_date": {
+          "name": "Show date",
+          "description": "Show the date as well as the time."
+        }
+      }
+    },
+    "countdown": {
+      "name": "Countdown",
+      "description": "Runs the matrix's built-in countdown timer. Needs firmware that has the countdown (iPixel Color 3.8 and later offer it).",
+      "fields": {
+        "command": {
+          "name": "Command",
+          "description": "Start a new countdown, pause it, resume it, or reset it to 0:00."
+        },
+        "minutes": {
+          "name": "Minutes",
+          "description": "Minutes to count down from, 0 to 90. Used by Start; Pause and Resume send the time too, as the app does."
+        },
+        "seconds": {
+          "name": "Seconds",
+          "description": "Seconds to count down from, 0 to 59."
+        }
+      }
+    },
+    "stopwatch": {
+      "name": "Stopwatch",
+      "description": "Runs the matrix's built-in stopwatch. Needs firmware that has the stopwatch (iPixel Color 3.8 and later offer it).",
+      "fields": {
+        "command": {
+          "name": "Command",
+          "description": "Start the stopwatch from zero, pause it, resume it, or reset it."
+        }
+      }
+    },
+    "delete_slots": {
+      "name": "Delete slots",
+      "description": "Deletes the messages or pictures saved in the given slots on the matrix.",
+      "fields": {
+        "slots": {
+          "name": "Slots",
+          "description": "Slot numbers to delete, 1 to 10."
+        }
+      }
+    },
+    "delete_all": {
+      "name": "Delete all",
+      "description": "Deletes every message and picture saved on the matrix."
+    }
+  },
+  "exceptions": {
+    "invalid_value": {
+      "message": "Invalid value: {error}"
+    },
+    "image_source": {
+      "message": "Give either a file or a URL for the picture, not both."
+    },
+    "invalid_image": {
+      "message": "The picture could not be prepared: {error}"
+    },
+    "file_not_allowed": {
+      "message": "Home Assistant is not allowed to read {file}. Put the picture in /config/www or a folder listed in allowlist_external_dirs."
+    },
+    "file_unreadable": {
+      "message": "Could not read {file}: {error}"
+    },
+    "download_failed": {
+      "message": "Could not download {url}: {error}"
+    },
+    "device_not_found": {
+      "message": "The LED matrix {address} is not in Bluetooth range."
+    },
+    "not_seen_by_adapter": {
+      "message": "The Bluetooth adapter or proxy {adapter} cannot currently see the LED matrix {address}. Check the proxy is online, or set Connect via to Automatic."
+    },
+    "connect_failed": {
+      "message": "Could not connect to the LED matrix: {error}"
+    },
+    "write_failed": {
+      "message": "Sending to the LED matrix failed: {error}"
+    },
+    "not_an_ipixel": {
+      "message": "The device does not have the iPixel write characteristic (0xFA02)."
+    },
+    "no_space": {
+      "message": "The LED matrix does not have enough storage for this message."
+    },
+    "rejected": {
+      "message": "The LED matrix rejected the message."
+    },
+    "invalid_message": {
+      "message": "The message could not be prepared: {error}"
+    },
+    "no_graph_data": {
+      "message": "Give one of values, points or series."
+    }
+  }
+}

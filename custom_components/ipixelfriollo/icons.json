@@ -1,0 +1,41 @@
+{
+  "entity": {
+    "button": {
+      "sync_time": {
+        "default": "mdi:clock-check-outline"
+      }
+    },
+    "light": {
+      "panel": {
+        "default": "mdi:dots-grid"
+      }
+    },
+    "switch": {
+      "upside_down": {
+        "default": "mdi:rotate-3d-variant"
+      }
+    },
+    "text": {
+      "message": {
+        "default": "mdi:message-text"
+      }
+    }
+  },
+  "services": {
+    "display_text": {
+      "service": "mdi:dots-grid"
+    },
+    "display_image": {
+      "service": "mdi:image-area"
+    },
+    "show_clock": {
+      "service": "mdi:clock-digital"
+    },
+    "delete_slots": {
+      "service": "mdi:delete-outline"
+    },
+    "delete_all": {
+      "service": "mdi:delete-sweep-outline"
+    }
+  }
+}

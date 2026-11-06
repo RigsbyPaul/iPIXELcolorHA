@@ -1,0 +1,24 @@
+{
+  "domain": "ipixelfriollo",
+  "name": "iPixelFriollo",
+  "bluetooth": [
+    {
+      "local_name": "LED_BLE_*",
+      "connectable": true
+    }
+  ],
+  "codeowners": ["@RigsbyPaul"],
+  "config_flow": true,
+  "dependencies": [
+    "bluetooth_adapters",
+    "http"
+  ],
+  "documentation": "https://github.com/RigsbyPaul/ipixelfriollo",
+  "issue_tracker": "https://github.com/RigsbyPaul/ipixelfriollo/issues",
+  "integration_type": "device",
+  "iot_class": "assumed_state",
+  "requirements": [
+    "Pillow>=10.1"
+  ],
+  "version": "0.13.0"
+}
