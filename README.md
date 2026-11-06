@@ -620,19 +620,3 @@ connection and every reply from the panel.
 * Rainbow modes 2 to 9 are presets in the panel's firmware, so how they look
   depends on the panel.
 
-## Developer notes
-
-* The protocol was traced from the iPixel Color 2.9.1 Android app. Each send
-  writes frames to characteristic `0xFA02` in MTU-sized pieces and waits for
-  the panel's acknowledgement on `0xFA03`.
-* `protocol.py` has no Home Assistant imports. Its text encoding is checked
-  byte for byte against this repository's `commands.send_text`. Run the
-  tests from the repository root with
-  `python -m unittest discover -s tests/ipixelfriollo`.
-* The **Documentation** link on the integration's page opens
-  `README.html`, which the integration serves from Home Assistant itself at
-  `/ipixelfriollo/README.html` (no internet needed). It is built from this
-  file: after editing `README.md`, run
-  `python tools/build_ipixelfriollo_readme.py` from the repository root
-  (needs the `markdown` package). A test fails if `README.html` is out of
-  date.
