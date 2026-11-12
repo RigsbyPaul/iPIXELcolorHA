@@ -6,7 +6,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import voluptuous as vol
+import probatio as vol
 
 from homeassistant.components.bluetooth import (
     BluetoothServiceInfoBleak,
