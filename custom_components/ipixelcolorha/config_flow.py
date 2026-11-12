@@ -6,7 +6,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import probatio as vol
+import voluptuous as vol
 
 from homeassistant.components.bluetooth import (
     BluetoothServiceInfoBleak,
@@ -73,7 +73,7 @@ def _is_matrix(info: BluetoothServiceInfoBleak) -> bool:
     return bool(info.name) and info.name.startswith(DEVICE_NAME_PREFIX)
 
 
-class iPIXELcolorHAConfigFlow(ConfigFlow, domain=DOMAIN):
+class IPixelColorConfigFlow(ConfigFlow, domain=DOMAIN):
     """Add a matrix found over Bluetooth."""
 
     VERSION = 1

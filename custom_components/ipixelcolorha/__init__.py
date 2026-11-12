@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-import probatio as vol
+import voluptuous as vol
 
 from homeassistant.components import bluetooth
 from homeassistant.components.http import StaticPathConfig

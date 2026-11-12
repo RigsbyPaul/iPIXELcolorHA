@@ -76,7 +76,7 @@ Each panel is added on its own, so repeat step 3 for every panel you have.
 The same action in YAML, for scripts and automations:
 
 ```yaml
-action: iPIXELcolorHA.display_text
+action: ipixelcolorha.display_text
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -119,16 +119,16 @@ Assistant starts; otherwise on the first send.
 
 | Action | Shows |
 |--------|-------|
-| [`iPIXELcolorHA.display_text`](#display-text) | Text, still or scrolling |
-| [`iPIXELcolorHA.display_image`](#display-image) | A picture or animated GIF |
-| [`iPIXELcolorHA.display_graph`](#display-graph) | A bar, line or dot graph of numbers |
-| [`iPIXELcolorHA.display_random_pixels`](#display-random-pixels) | Flashing random-colour pixels or squares |
-| [`iPIXELcolorHA.show_clock`](#show-clock) | The panel's built-in clock |
-| [`iPIXELcolorHA.countdown`](#countdown) | The panel's built-in countdown timer |
-| [`iPIXELcolorHA.stopwatch`](#stopwatch) | The panel's built-in stopwatch |
-| [`iPIXELcolorHA.draw_pixels`](#draw-pixels) | Single pixels or filled rectangles, live |
-| [`iPIXELcolorHA.draw_frame`](#draw-frame) | Several colours of rectangles, pixels and text as one picture |
-| [`iPIXELcolorHA.delete_slots`, `iPIXELcolorHA.delete_all`](#save-slots) | Nothing: they clear saved programs |
+| [`ipixelcolorha.display_text`](#display-text) | Text, still or scrolling |
+| [`ipixelcolorha.display_image`](#display-image) | A picture or animated GIF |
+| [`ipixelcolorha.display_graph`](#display-graph) | A bar, line or dot graph of numbers |
+| [`ipixelcolorha.display_random_pixels`](#display-random-pixels) | Flashing random-colour pixels or squares |
+| [`ipixelcolorha.show_clock`](#show-clock) | The panel's built-in clock |
+| [`ipixelcolorha.countdown`](#countdown) | The panel's built-in countdown timer |
+| [`ipixelcolorha.stopwatch`](#stopwatch) | The panel's built-in stopwatch |
+| [`ipixelcolorha.draw_pixels`](#draw-pixels) | Single pixels or filled rectangles, live |
+| [`ipixelcolorha.draw_frame`](#draw-frame) | Several colours of rectangles, pixels and text as one picture |
+| [`ipixelcolorha.delete_slots`, `ipixelcolorha.delete_all`](#save-slots) | Nothing: they clear saved programs |
 
 Every field except the ones marked required can be left out. Values not given
 come from the panel's [options](#options).
@@ -149,7 +149,7 @@ Text that fits the panel can be shown still (`effect: 0`); longer text should
 scroll. On a 192-pixel-wide panel about 10 characters fit.
 
 ```yaml
-action: iPIXELcolorHA.display_text
+action: ipixelcolorha.display_text
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -177,7 +177,7 @@ PNG, JPEG, GIF and WebP work. Animated GIF, PNG and WebP files stay animated
 and keep each frame's timing.
 
 ```yaml
-action: iPIXELcolorHA.display_image
+action: ipixelcolorha.display_image
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -212,7 +212,7 @@ an older name for `y_max`.
 A bar graph of a list of numbers:
 
 ```yaml
-action: iPIXELcolorHA.display_graph
+action: ipixelcolorha.display_graph
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -224,7 +224,7 @@ data:
 A line graph of x-y points, with the y axis starting at 0:
 
 ```yaml
-action: iPIXELcolorHA.display_graph
+action: ipixelcolorha.display_graph
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -236,7 +236,7 @@ data:
 Two lines in different colours, with a fixed x range of 0 to 24 hours:
 
 ```yaml
-action: iPIXELcolorHA.display_graph
+action: ipixelcolorha.display_graph
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -272,7 +272,7 @@ looping animation.
 | `save_slot` | 1 to 10 | 1 |
 
 ```yaml
-action: iPIXELcolorHA.display_random_pixels
+action: ipixelcolorha.display_random_pixels
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -313,7 +313,7 @@ A red dot in the top-right corner of a 192 x 32 panel, over whatever is
 showing:
 
 ```yaml
-action: iPIXELcolorHA.draw_pixels
+action: ipixelcolorha.draw_pixels
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -326,14 +326,14 @@ twice: once in dim grey for the empty bar, then in green for the filled part:
 
 ```yaml
 sequence:
-  - action: iPIXELcolorHA.draw_pixels
+  - action: ipixelcolorha.draw_pixels
     target:
       entity_id: text.led_ble_a1b2c3d4_message
     data:
       clear: true
       rectangles: [[0, 30, 191, 31]]
       color: [20, 20, 20]
-  - action: iPIXELcolorHA.draw_pixels
+  - action: ipixelcolorha.draw_pixels
     target:
       entity_id: text.led_ble_a1b2c3d4_message
     data:
@@ -369,7 +369,7 @@ the bundled font without anti-aliasing.
 A progress bar with the percentage beside it, on a 192 x 32 panel:
 
 ```yaml
-action: iPIXELcolorHA.draw_frame
+action: ipixelcolorha.draw_frame
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -396,7 +396,7 @@ rewritten each time. Animations are not played live: only their first frame
 is shown.
 
 ```yaml
-action: iPIXELcolorHA.display_graph
+action: ipixelcolorha.display_graph
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -406,7 +406,7 @@ data:
 ```
 
 ```yaml
-action: iPIXELcolorHA.display_image
+action: ipixelcolorha.display_image
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -430,7 +430,7 @@ built-in clock.
 | `show_date` | `true` or `false` | `true` |
 
 ```yaml
-action: iPIXELcolorHA.show_clock
+action: ipixelcolorha.show_clock
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -456,7 +456,7 @@ changes on them. The firmware version is on the panel's device page (see
 `pause` and `resume` too if you know it; `reset` clears the timer to 0:00.
 
 ```yaml
-action: iPIXELcolorHA.countdown
+action: ipixelcolorha.countdown
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -474,7 +474,7 @@ countdown, it needs panel firmware that has it; firmware 29.12 does.
 | `command` (required) | `start`, `pause`, `resume` or `reset` | `start` |
 
 ```yaml
-action: iPIXELcolorHA.stopwatch
+action: ipixelcolorha.stopwatch
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -495,8 +495,8 @@ The panel stores what you send in one of 10 numbered program slots. Every
 action writes to slot 1 unless you give a different `save_slot` (or change
 the default in the options), so each new message replaces the last one.
 
-* `iPIXELcolorHA.delete_slots` with `slots: [2, 3]` clears the given slots.
-* `iPIXELcolorHA.delete_all` clears **every** slot, including anything saved
+* `ipixelcolorha.delete_slots` with `slots: [2, 3]` clears the given slots.
+* `ipixelcolorha.delete_all` clears **every** slot, including anything saved
   from the phone app. It can't be undone.
 
 ## Options
@@ -628,11 +628,11 @@ connection and every reply from the panel.
 * `protocol.py` has no Home Assistant imports. Its text encoding is checked
   byte for byte against this repository's `commands.send_text`. Run the
   tests from the repository root with
-  `python -m unittest discover -s tests/iPIXELcolorHA`.
+  `python -m unittest discover -s tests/ipixelcolorha`.
 * The **Documentation** link on the integration's page opens
   `README.html`, which the integration serves from Home Assistant itself at
-  `/iPIXELcolorHA/README.html` (no internet needed). It is built from this
+  `/ipixelcolorha/README.html` (no internet needed). It is built from this
   file: after editing `README.md`, run
-  `python tools/build_iPIXELcolorHA_readme.py` from the repository root
+  `python tools/build_ipixelcolorha_readme.py` from the repository root
   (needs the `markdown` package). A test fails if `README.html` is out of
   date.

@@ -60,14 +60,15 @@ class IPixelPanelLight(IPixelEntity, LightEntity, RestoreEntity):
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the panel on, setting the brightness if one is given."""
-        if not self._attr_is_on:
+        was_on = self._attr_is_on
+        if not was_on:
             await self._async_command(build_power(True))
             self._attr_is_on = True
         if (brightness := kwargs.get(ATTR_BRIGHTNESS)) is not None:
             await self._async_command(build_brightness(_to_percent(brightness)))
             self._attr_brightness = brightness
             self._device.brightness_percent = _to_percent(brightness)
-        elif self._attr_is_on and not kwargs:
+        elif was_on and not kwargs:
             # Plain "turn on" when already on: re-send power in case the panel
             # was switched off elsewhere, such as from the phone app.
             await self._async_command(build_power(True))

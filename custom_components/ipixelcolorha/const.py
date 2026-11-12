@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-DOMAIN = "iPIXELcolorHA"
+DOMAIN = "ipixelcolorha"
 # Where the integration serves README.html; the manifest's "documentation"
 # link points here so the integration page opens the local copy.
-README_URL = "/iPIXELcolorHA/README.html"
+README_URL = "/ipixelcolorha/README.html"
 
 DEVICE_NAME_PREFIX = "LED_BLE_"
 

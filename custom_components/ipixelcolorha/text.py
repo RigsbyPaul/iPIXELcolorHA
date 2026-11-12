@@ -306,7 +306,17 @@ class IPixelMessageText(IPixelEntity, TextEntity, RestoreEntity):
         try:
             async with asyncio.timeout(DOWNLOAD_TIMEOUT), session.get(url) as response:
                 response.raise_for_status()
-                data = await response.content.read(MAX_PICTURE_BYTES + 1)
+                # read(n) returns only what has arrived so far, so keep
+                # reading until the body ends or passes the size limit.
+                buffer = bytearray()
+                while len(buffer) <= MAX_PICTURE_BYTES:
+                    chunk = await response.content.read(
+                        MAX_PICTURE_BYTES + 1 - len(buffer)
+                    )
+                    if not chunk:
+                        break
+                    buffer.extend(chunk)
+                data = bytes(buffer)
         except (aiohttp.ClientError, TimeoutError) as err:
             raise HomeAssistantError(
                 translation_domain=DOMAIN,
