@@ -625,3 +625,6 @@ connection and every reply from the panel.
 
 * With thanks to original solution by https://github.com/lucagoc/pypixelcolor
 
+## AI
+
+* Practically all of this respository was AI generated
