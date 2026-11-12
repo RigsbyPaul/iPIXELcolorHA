@@ -1,4 +1,4 @@
-"""Base entity for iPixelFriollo."""
+"""Base entity for iPIXELcolorHA."""
 
 from __future__ import annotations
 

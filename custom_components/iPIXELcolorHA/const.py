@@ -1,11 +1,11 @@
-"""Constants for the iPixelFriollo integration."""
+"""Constants for the iPIXELcolorHA integration."""
 
 from __future__ import annotations
 
-DOMAIN = "ipixelfriollo"
+DOMAIN = "iPIXELcolorHA"
 # Where the integration serves README.html; the manifest's "documentation"
 # link points here so the integration page opens the local copy.
-README_URL = "/ipixelfriollo/README.html"
+README_URL = "/iPIXELcolorHA/README.html"
 
 DEVICE_NAME_PREFIX = "LED_BLE_"
 

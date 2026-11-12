@@ -1,6 +1,6 @@
 {
-  "domain": "ipixelfriollo",
-  "name": "iPixelFriollo",
+  "domain": "iPIXELcolorHA",
+  "name": "iPIXELcolorHA",
   "bluetooth": [
     {
       "local_name": "LED_BLE_*",
@@ -13,8 +13,8 @@
     "bluetooth_adapters",
     "http"
   ],
-  "documentation": "https://github.com/RigsbyPaul/ipixelfriollo",
-  "issue_tracker": "https://github.com/RigsbyPaul/ipixelfriollo/issues",
+  "documentation": "https://github.com/RigsbyPaul/iPIXELcolorHA",
+  "issue_tracker": "https://github.com/RigsbyPaul/iPIXELcolorHA/issues",
   "integration_type": "device",
   "iot_class": "assumed_state",
   "requirements": [

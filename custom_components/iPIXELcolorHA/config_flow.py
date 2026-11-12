@@ -1,4 +1,4 @@
-"""Config flow for iPixelFriollo."""
+"""Config flow for iPIXELcolorHA."""
 
 from __future__ import annotations
 
@@ -73,7 +73,7 @@ def _is_matrix(info: BluetoothServiceInfoBleak) -> bool:
     return bool(info.name) and info.name.startswith(DEVICE_NAME_PREFIX)
 
 
-class IPixelFriolloConfigFlow(ConfigFlow, domain=DOMAIN):
+class iPIXELcolorHAConfigFlow(ConfigFlow, domain=DOMAIN):
     """Add a matrix found over Bluetooth."""
 
     VERSION = 1

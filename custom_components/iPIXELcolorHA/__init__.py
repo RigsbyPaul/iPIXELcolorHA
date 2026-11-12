@@ -1,4 +1,4 @@
-"""The iPixelFriollo integration: show text on iPixel LED matrices over BLE."""
+"""The iPIXELcolorHA integration: show text on iPixel LED matrices over BLE."""
 
 from __future__ import annotations
 

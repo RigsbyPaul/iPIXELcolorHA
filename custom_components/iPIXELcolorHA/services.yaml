@@ -1,7 +1,7 @@
 display_text:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     message:
@@ -50,7 +50,7 @@ display_text:
 display_image:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     file:
@@ -91,7 +91,7 @@ display_image:
 display_graph:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     values:
@@ -168,7 +168,7 @@ display_graph:
 display_random_pixels:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     steps:
@@ -219,7 +219,7 @@ display_random_pixels:
 draw_pixels:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     points:
@@ -240,7 +240,7 @@ draw_pixels:
 draw_frame:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     layers:
@@ -269,7 +269,7 @@ draw_frame:
 show_clock:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     style:
@@ -292,7 +292,7 @@ show_clock:
 countdown:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     command:
@@ -327,7 +327,7 @@ countdown:
 stopwatch:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     command:
@@ -344,7 +344,7 @@ stopwatch:
 delete_slots:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text
   fields:
     slots:
@@ -367,5 +367,5 @@ delete_slots:
 delete_all:
   target:
     entity:
-      integration: ipixelfriollo
+      integration: iPIXELcolorHA
       domain: text

@@ -1,4 +1,4 @@
-# iPixelFriollo
+# iPIXELcolorHA
 
 A Home Assistant integration for iPixel Bluetooth LED matrix panels (the ones
 that advertise as `LED_BLE_…` and are normally used with the iPixel Color phone
@@ -50,13 +50,13 @@ same panel, such as iPIXEL Color.
 
 ## Install
 
-1. Copy the `ipixelfriollo` folder to `/config/custom_components/ipixelfriollo`
+1. Copy the `iPIXELcolorHA` folder to `/config/custom_components/iPIXELcolorHA`
    on your Home Assistant machine (for example with the Samba share or File
    editor app).
 2. Restart Home Assistant.
 3. Go to **Settings → Devices & services**. Your panel should appear under
    **Discovered** as `LED_BLE_…`; choose **Add**. If it doesn't, choose
-   **Add integration → iPixelFriollo** and pick it from the list.
+   **Add integration → iPIXELcolorHA** and pick it from the list.
 4. Setup connects to the panel and reads its size. Check the height and
    width it shows (for example 32 and 192) and choose **Submit**.
 
@@ -64,19 +64,19 @@ Each panel is added on its own, so repeat step 3 for every panel you have.
 
 ## Your first message
 
-1. Open **Settings → Devices & services → iPixelFriollo** and select your
+1. Open **Settings → Devices & services → iPIXELcolorHA** and select your
    panel.
 2. Type some text into the **Message** box and press Enter. After a second
    or two it scrolls across the panel in white.
 3. Now try an action with your own colour. Go to **Tools → Actions** (called
    **Developer Tools** before Home Assistant 2026.8), choose
-   **iPixelFriollo: Display text**, pick your panel's **Message** entity as
+   **iPIXELcolorHA: Display text**, pick your panel's **Message** entity as
    the target, fill in a message and a colour, and choose **Perform action**.
 
 The same action in YAML, for scripts and automations:
 
 ```yaml
-action: ipixelfriollo.display_text
+action: iPIXELcolorHA.display_text
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -110,7 +110,7 @@ change something with the phone app, Home Assistant won't know.
 
 The panel's firmware versions are read the first time Home Assistant connects
 to it and shown on its device page (**Settings → Devices & services →
-iPixelFriollo →** the panel): **Firmware** is the main chip (MCU) version and
+iPIXELcolorHA →** the panel): **Firmware** is the main chip (MCU) version and
 **Hardware** the Bluetooth module's, as the phone app shows them under device
 info. With [Keep connected](#keep-connected) on they are read when Home
 Assistant starts; otherwise on the first send.
@@ -119,16 +119,16 @@ Assistant starts; otherwise on the first send.
 
 | Action | Shows |
 |--------|-------|
-| [`ipixelfriollo.display_text`](#display-text) | Text, still or scrolling |
-| [`ipixelfriollo.display_image`](#display-image) | A picture or animated GIF |
-| [`ipixelfriollo.display_graph`](#display-graph) | A bar, line or dot graph of numbers |
-| [`ipixelfriollo.display_random_pixels`](#display-random-pixels) | Flashing random-colour pixels or squares |
-| [`ipixelfriollo.show_clock`](#show-clock) | The panel's built-in clock |
-| [`ipixelfriollo.countdown`](#countdown) | The panel's built-in countdown timer |
-| [`ipixelfriollo.stopwatch`](#stopwatch) | The panel's built-in stopwatch |
-| [`ipixelfriollo.draw_pixels`](#draw-pixels) | Single pixels or filled rectangles, live |
-| [`ipixelfriollo.draw_frame`](#draw-frame) | Several colours of rectangles, pixels and text as one picture |
-| [`ipixelfriollo.delete_slots`, `ipixelfriollo.delete_all`](#save-slots) | Nothing: they clear saved programs |
+| [`iPIXELcolorHA.display_text`](#display-text) | Text, still or scrolling |
+| [`iPIXELcolorHA.display_image`](#display-image) | A picture or animated GIF |
+| [`iPIXELcolorHA.display_graph`](#display-graph) | A bar, line or dot graph of numbers |
+| [`iPIXELcolorHA.display_random_pixels`](#display-random-pixels) | Flashing random-colour pixels or squares |
+| [`iPIXELcolorHA.show_clock`](#show-clock) | The panel's built-in clock |
+| [`iPIXELcolorHA.countdown`](#countdown) | The panel's built-in countdown timer |
+| [`iPIXELcolorHA.stopwatch`](#stopwatch) | The panel's built-in stopwatch |
+| [`iPIXELcolorHA.draw_pixels`](#draw-pixels) | Single pixels or filled rectangles, live |
+| [`iPIXELcolorHA.draw_frame`](#draw-frame) | Several colours of rectangles, pixels and text as one picture |
+| [`iPIXELcolorHA.delete_slots`, `iPIXELcolorHA.delete_all`](#save-slots) | Nothing: they clear saved programs |
 
 Every field except the ones marked required can be left out. Values not given
 come from the panel's [options](#options).
@@ -149,7 +149,7 @@ Text that fits the panel can be shown still (`effect: 0`); longer text should
 scroll. On a 192-pixel-wide panel about 10 characters fit.
 
 ```yaml
-action: ipixelfriollo.display_text
+action: iPIXELcolorHA.display_text
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -177,7 +177,7 @@ PNG, JPEG, GIF and WebP work. Animated GIF, PNG and WebP files stay animated
 and keep each frame's timing.
 
 ```yaml
-action: ipixelfriollo.display_image
+action: iPIXELcolorHA.display_image
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -212,7 +212,7 @@ an older name for `y_max`.
 A bar graph of a list of numbers:
 
 ```yaml
-action: ipixelfriollo.display_graph
+action: iPIXELcolorHA.display_graph
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -224,7 +224,7 @@ data:
 A line graph of x-y points, with the y axis starting at 0:
 
 ```yaml
-action: ipixelfriollo.display_graph
+action: iPIXELcolorHA.display_graph
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -236,7 +236,7 @@ data:
 Two lines in different colours, with a fixed x range of 0 to 24 hours:
 
 ```yaml
-action: ipixelfriollo.display_graph
+action: iPIXELcolorHA.display_graph
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -272,7 +272,7 @@ looping animation.
 | `save_slot` | 1 to 10 | 1 |
 
 ```yaml
-action: ipixelfriollo.display_random_pixels
+action: iPIXELcolorHA.display_random_pixels
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -313,7 +313,7 @@ A red dot in the top-right corner of a 192 x 32 panel, over whatever is
 showing:
 
 ```yaml
-action: ipixelfriollo.draw_pixels
+action: iPIXELcolorHA.draw_pixels
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -326,14 +326,14 @@ twice: once in dim grey for the empty bar, then in green for the filled part:
 
 ```yaml
 sequence:
-  - action: ipixelfriollo.draw_pixels
+  - action: iPIXELcolorHA.draw_pixels
     target:
       entity_id: text.led_ble_a1b2c3d4_message
     data:
       clear: true
       rectangles: [[0, 30, 191, 31]]
       color: [20, 20, 20]
-  - action: ipixelfriollo.draw_pixels
+  - action: iPIXELcolorHA.draw_pixels
     target:
       entity_id: text.led_ble_a1b2c3d4_message
     data:
@@ -369,7 +369,7 @@ the bundled font without anti-aliasing.
 A progress bar with the percentage beside it, on a 192 x 32 panel:
 
 ```yaml
-action: ipixelfriollo.draw_frame
+action: iPIXELcolorHA.draw_frame
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -396,7 +396,7 @@ rewritten each time. Animations are not played live: only their first frame
 is shown.
 
 ```yaml
-action: ipixelfriollo.display_graph
+action: iPIXELcolorHA.display_graph
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -406,7 +406,7 @@ data:
 ```
 
 ```yaml
-action: ipixelfriollo.display_image
+action: iPIXELcolorHA.display_image
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -430,7 +430,7 @@ built-in clock.
 | `show_date` | `true` or `false` | `true` |
 
 ```yaml
-action: ipixelfriollo.show_clock
+action: iPIXELcolorHA.show_clock
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -456,7 +456,7 @@ changes on them. The firmware version is on the panel's device page (see
 `pause` and `resume` too if you know it; `reset` clears the timer to 0:00.
 
 ```yaml
-action: ipixelfriollo.countdown
+action: iPIXELcolorHA.countdown
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -474,7 +474,7 @@ countdown, it needs panel firmware that has it; firmware 29.12 does.
 | `command` (required) | `start`, `pause`, `resume` or `reset` | `start` |
 
 ```yaml
-action: ipixelfriollo.stopwatch
+action: iPIXELcolorHA.stopwatch
 target:
   entity_id: text.led_ble_a1b2c3d4_message
 data:
@@ -495,13 +495,13 @@ The panel stores what you send in one of 10 numbered program slots. Every
 action writes to slot 1 unless you give a different `save_slot` (or change
 the default in the options), so each new message replaces the last one.
 
-* `ipixelfriollo.delete_slots` with `slots: [2, 3]` clears the given slots.
-* `ipixelfriollo.delete_all` clears **every** slot, including anything saved
+* `iPIXELcolorHA.delete_slots` with `slots: [2, 3]` clears the given slots.
+* `iPIXELcolorHA.delete_all` clears **every** slot, including anything saved
   from the phone app. It can't be undone.
 
 ## Options
 
-Open **Settings → Devices & services → iPixelFriollo**, select the panel and
+Open **Settings → Devices & services → iPIXELcolorHA**, select the panel and
 choose **Configure** (the cog).
 
 | Option | What it does | Default |
@@ -602,7 +602,7 @@ Put the file in `/config/www`, or add its folder to
 [`allowlist_external_dirs`](https://www.home-assistant.io/integrations/homeassistant/#allowlist_external_dirs).
 
 **Seeing what's happening.**
-On the iPixelFriollo integration page, choose **Enable debug logging**, try
+On the iPIXELcolorHA integration page, choose **Enable debug logging**, try
 again, then **Disable debug logging** to download the log. It shows each
 connection and every reply from the panel.
 
@@ -628,11 +628,11 @@ connection and every reply from the panel.
 * `protocol.py` has no Home Assistant imports. Its text encoding is checked
   byte for byte against this repository's `commands.send_text`. Run the
   tests from the repository root with
-  `python -m unittest discover -s tests/ipixelfriollo`.
+  `python -m unittest discover -s tests/iPIXELcolorHA`.
 * The **Documentation** link on the integration's page opens
   `README.html`, which the integration serves from Home Assistant itself at
-  `/ipixelfriollo/README.html` (no internet needed). It is built from this
+  `/iPIXELcolorHA/README.html` (no internet needed). It is built from this
   file: after editing `README.md`, run
-  `python tools/build_ipixelfriollo_readme.py` from the repository root
+  `python tools/build_iPIXELcolorHA_readme.py` from the repository root
   (needs the `markdown` package). A test fails if `README.html` is out of
   date.
