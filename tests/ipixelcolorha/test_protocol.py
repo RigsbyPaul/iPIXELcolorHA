@@ -3,7 +3,7 @@
 Run from the repository root:  python -m unittest discover -s tests/ipixelcolorha -v
 
 The encoder is checked against the repo's existing, device-tested encoders
-(commands.send_text and iPixelHCISnoop/ble_text_encoder.py).
+(tools/iPixelHCISnoop: iPixel-CLI/commands.py and ble_text_encoder.py).
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ import importlib.util
 import io
 from pathlib import Path
 import importlib
+import os
 import random
 import sys
 import unittest
@@ -29,8 +30,9 @@ protocol = importlib.util.module_from_spec(_spec)
 sys.modules["ipixel_protocol"] = protocol
 _spec.loader.exec_module(protocol)
 
-sys.path.insert(0, str(REPO))
-sys.path.insert(0, str(REPO / "iPixelHCISnoop"))
+SNOOP = REPO / "tools" / "iPixelHCISnoop"
+sys.path.insert(0, str(SNOOP / "iPixel-CLI"))
+sys.path.insert(0, str(SNOOP))
 
 
 def _reference(test: unittest.TestCase, name: str):
@@ -46,6 +48,9 @@ class FrameCompatibilityTest(unittest.TestCase):
 
     def test_matches_repo_send_text(self) -> None:
         commands = _reference(self, "commands")
+        # The CLI finds its fonts relative to the working directory.
+        self.addCleanup(os.chdir, os.getcwd())
+        os.chdir(SNOOP / "iPixel-CLI")
 
         for text, slot, speed, effect, rainbow in (
             ("Hi", 3, 42, 1, 2),

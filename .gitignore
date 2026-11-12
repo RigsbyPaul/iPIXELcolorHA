@@ -1,2 +1,5 @@
 APK/
 Others/
+
+tools/iPixelHCISnoop/
+__pycache__/
