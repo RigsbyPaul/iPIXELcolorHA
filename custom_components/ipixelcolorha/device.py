@@ -112,6 +112,7 @@ class IPixelDevice:
         self.brightness_percent = 100
         # Firmware versions, read once per run on the first connection.
         self.firmware: FirmwareInfo | None = None
+        self.panel_info: PanelInfo | None = None
         self.on_firmware: Callable[[FirmwareInfo], None] | None = None
 
     @property
@@ -262,7 +263,11 @@ class IPixelDevice:
                 return None
             return info
 
-        return await self._async_session(connect_via, work)
+        info = await self._async_session(connect_via, work)
+        if info is not None and info != self.panel_info:
+            self.panel_info = info
+            self._notify_listeners()
+        return info
 
     async def async_read_firmware(
         self, connect_via: str | None = None

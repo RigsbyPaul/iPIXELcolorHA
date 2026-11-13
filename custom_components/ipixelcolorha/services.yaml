@@ -341,6 +341,94 @@ stopwatch:
             - "pause"
             - "resume"
             - "reset"
+set_schedule:
+  target:
+    entity:
+      integration: iPIXELcolorHA
+      domain: text
+  fields:
+    time:
+      required: true
+      selector:
+        time:
+    days:
+      default: [mon, tue, wed, thu, fri, sat, sun]
+      selector:
+        select:
+          multiple: true
+          options: [mon, tue, wed, thu, fri, sat, sun]
+    display_on:
+      default: true
+      selector:
+        boolean:
+    number:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 255
+          mode: box
+
+rhythm:
+  target:
+    entity:
+      integration: iPIXELcolorHA
+      domain: text
+  fields:
+    levels:
+      required: true
+      example: [3, 8, 15, 10, 5, 2, 7, 12, 9, 4, 1]
+      selector:
+        object:
+    style:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 4
+          mode: box
+
+rhythm_animation:
+  target:
+    entity:
+      integration: iPIXELcolorHA
+      domain: text
+  fields:
+    style:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 1
+          mode: box
+    speed:
+      default: 4
+      selector:
+        number:
+          min: 0
+          max: 7
+          mode: slider
+
+scoreboard:
+  target:
+    entity:
+      integration: iPIXELcolorHA
+      domain: text
+  fields:
+    score_1:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 999
+          mode: box
+    score_2:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 999
+          mode: box
 delete_slots:
   target:
     entity:
@@ -369,3 +457,26 @@ delete_all:
     entity:
       integration: iPIXELcolorHA
       domain: text
+play_slots:
+  target:
+    entity:
+      integration: iPIXELcolorHA
+      domain: text
+  fields:
+    slots:
+      required: true
+      example: "[2, 3]"
+      selector:
+        select:
+          multiple: true
+          options:
+            - "1"
+            - "2"
+            - "3"
+            - "4"
+            - "5"
+            - "6"
+            - "7"
+            - "8"
+            - "9"
+            - "10"

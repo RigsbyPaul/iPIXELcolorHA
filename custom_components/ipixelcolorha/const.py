@@ -17,6 +17,10 @@ CONF_SPEED = "speed"
 CONF_EFFECT = "effect"
 CONF_RAINBOW_MODE = "rainbow_mode"
 CONF_SAVE_SLOT = "save_slot"
+CONF_CLOCK_STYLE = "clock_style"
+CONF_CLOCK_24H = "clock_24h"
+CONF_CLOCK_SHOW_DATE = "clock_show_date"
+DEFAULT_CLOCK_STYLE = 1
 # Bluetooth adapter or proxy (its scanner source) to connect through.
 CONF_CONNECT_VIA = "connect_via"
 CONNECT_VIA_AUTO = "auto"
@@ -92,6 +96,18 @@ ATTR_SLOTS = "slots"
 
 SERVICE_DELETE_ALL = "delete_all"
 
+SERVICE_PLAY_SLOTS = "play_slots"
+
+SERVICE_SET_SCHEDULE = "set_schedule"
+ATTR_NUMBER = "number"
+ATTR_TIME = "time"
+ATTR_DAYS = "days"
+ATTR_DISPLAY_ON = "display_on"
+
+SERVICE_SCOREBOARD = "scoreboard"
+ATTR_SCORE_1 = "score_1"
+ATTR_SCORE_2 = "score_2"
+
 SERVICE_COUNTDOWN = "countdown"
 SERVICE_STOPWATCH = "stopwatch"
 ATTR_COMMAND = "command"
@@ -105,3 +121,7 @@ DOWNLOAD_TIMEOUT = 15
 
 # Seconds to wait for the matrix to acknowledge each frame.
 ACK_TIMEOUT = 5.0
+SERVICE_RHYTHM = "rhythm"
+SERVICE_RHYTHM_ANIMATION = "rhythm_animation"
+ATTR_STYLE = "style"
+ATTR_LEVELS = "levels"

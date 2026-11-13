@@ -3,6 +3,12 @@
     "button": {
       "sync_time": {
         "default": "mdi:clock-check-outline"
+      },
+      "show_clock": {
+        "default": "mdi:clock-digital"
+      },
+      "resend_message": {
+        "default": "mdi:send"
       }
     },
     "light": {
@@ -10,9 +16,39 @@
         "default": "mdi:dots-grid"
       }
     },
+    "number": {
+      "text_speed": {
+        "default": "mdi:speedometer"
+      },
+      "rainbow_mode": {
+        "default": "mdi:looks"
+      }
+    },
+    "select": {
+      "text_effect": {
+        "default": "mdi:animation-play"
+      },
+      "clock_style": {
+        "default": "mdi:clock-edit-outline"
+      }
+    },
+    "sensor": {
+      "panel_size": {
+        "default": "mdi:arrow-expand-horizontal"
+      },
+      "device_type": {
+        "default": "mdi:chip"
+      }
+    },
     "switch": {
       "upside_down": {
         "default": "mdi:rotate-3d-variant"
+      },
+      "clock_24h": {
+        "default": "mdi:hours-24"
+      },
+      "clock_show_date": {
+        "default": "mdi:calendar-today"
       }
     },
     "text": {
@@ -31,11 +67,26 @@
     "show_clock": {
       "service": "mdi:clock-digital"
     },
+    "scoreboard": {
+      "service": "mdi:scoreboard-outline"
+    },
     "delete_slots": {
       "service": "mdi:delete-outline"
     },
     "delete_all": {
       "service": "mdi:delete-sweep-outline"
+    },
+    "play_slots": {
+      "service": "mdi:play-box-outline"
+    },
+    "set_schedule": {
+      "service": "mdi:calendar-clock"
+    },
+    "rhythm": {
+      "service": "mdi:equalizer"
+    },
+    "rhythm_animation": {
+      "service": "mdi:music-note"
     }
   }
 }

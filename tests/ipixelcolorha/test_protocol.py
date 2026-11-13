@@ -337,6 +337,18 @@ class CommandTest(unittest.TestCase):
         self.assertEqual(
             protocol.build_delete_slots([2, 5]), bytes((8, 0, 2, 1, 2, 0, 2, 5))
         )
+        # pypixelcolor set_scores, extended to 16-bit scores as in the app.
+        self.assertEqual(
+            protocol.build_scoreboard(3, 1), bytes((8, 0, 0x0A, 0x80, 3, 0, 1, 0))
+        )
+        self.assertEqual(
+            protocol.build_scoreboard(300, 0), bytes((8, 0, 0x0A, 0x80, 44, 1, 0, 0))
+        )
+        # pypixelcolor show_slot(3) is a one-slot list.
+        self.assertEqual(protocol.build_program_list([3]), bytes((7, 0, 8, 0x80, 1, 0, 3)))
+        self.assertEqual(
+            protocol.build_program_list([2, 3]), bytes((8, 0, 8, 0x80, 2, 0, 2, 3))
+        )
         # 4 November 2026 is a Wednesday.
         self.assertEqual(
             protocol.build_clock_mode(3, True, True, when)[7:], bytes((26, 11, 4, 3))
@@ -349,6 +361,11 @@ class CommandTest(unittest.TestCase):
             lambda: protocol.build_clock_mode(10, True, True, when),
             lambda: protocol.build_delete_slots([]),
             lambda: protocol.build_delete_slots([11]),
+            lambda: protocol.build_scoreboard(-1, 0),
+            lambda: protocol.build_scoreboard(0, 1000),
+            lambda: protocol.build_program_list([]),
+            lambda: protocol.build_program_list([0]),
+            lambda: protocol.build_program_list([11]),
         ):
             with self.assertRaises(ValueError):
                 call()
@@ -361,6 +378,32 @@ class CommandTest(unittest.TestCase):
         )
         self.assertIsNone(protocol.parse_device_info(bytes((5, 0, 1, 0, 3))))  # an ack
         self.assertIsNone(protocol.parse_device_info(b"\x01\x02"))
+
+
+    def test_rhythm(self):
+        self.assertEqual(
+            protocol.build_rhythm(2, [1, 15]),
+            bytes((16, 0, 1, 2, 2, 1, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+        )
+        self.assertEqual(protocol.build_rhythm_animation(1, 7), bytes((6, 0, 0, 2, 7, 1)))
+        for args in ((5, []), (0, [16]), (0, [0] * 12)):
+            with self.assertRaises(ValueError):
+                protocol.build_rhythm(*args)
+        with self.assertRaises(ValueError):
+            protocol.build_rhythm_animation(2, 0)
+
+    def test_schedule(self):
+        self.assertEqual(
+            protocol.build_schedule(2, 20, 38, list(protocol.WEEKDAYS), True),
+            bytes((9, 0, 0x11, 0x80, 1, 2, 0xFF, 20, 38)),
+        )
+        self.assertEqual(
+            protocol.build_schedule(0, 7, 5, ["thu"], False),
+            bytes((9, 0, 0x11, 0x80, 0, 0, 0x11, 7, 5)),
+        )
+        for args in ((0, 24, 0, ["mon"]), (0, 0, 60, ["mon"]), (256, 0, 0, ["mon"]), (0, 0, 0, [])):
+            with self.assertRaises(ValueError):
+                protocol.build_schedule(*args, True)
 
 
 class AckTest(unittest.TestCase):

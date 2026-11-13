@@ -969,6 +969,18 @@ def build_delete_slots(slots: list[int]) -> bytes:
     )
 
 
+def build_program_list(slots: list[int]) -> bytes:
+    """Set the slots the panel plays in turn (ChannelListActivity.SendChannel).
+
+    Length, 0, 0x08, 0x80, slot count, 0, then the slot numbers.
+    """
+    if not slots:
+        raise ValueError("Give at least one slot")
+    for slot in slots:
+        _check_range("slot", slot, 1, MAX_SLOT)
+    return bytes((6 + len(slots), 0, 8, 0x80, len(slots), 0, *slots))
+
+
 def build_delete_all() -> bytes:
     """Delete every saved program."""
     return bytes((4, 0, 3, 0x80))
@@ -1003,6 +1015,68 @@ def build_countdown(action: TimerAction, minutes: int = 0, seconds: int = 0) -> 
 def build_stopwatch(action: TimerAction) -> bytes:
     """Run the panel's built-in stopwatch (SendCore.setSecondChronograph)."""
     return bytes((5, 0, 0x09, 0x80, TimerAction(action)))
+
+
+SCORE_MAX = 999
+
+
+def build_scoreboard(score_1: int, score_2: int) -> bytes:
+    """Show the panel's built-in scoreboard (SendCore.setScoreboard).
+
+    Each score is sent as a 16-bit little-endian number.
+    """
+    _check_range("score_1", score_1, 0, SCORE_MAX)
+    _check_range("score_2", score_2, 0, SCORE_MAX)
+    return (
+        bytes((8, 0, 0x0A, 0x80))
+        + score_1.to_bytes(2, "little")
+        + score_2.to_bytes(2, "little")
+    )
+
+
+RHYTHM_STYLES = 5
+RHYTHM_BARS = 11
+RHYTHM_LEVEL_MAX = 15
+
+
+def build_rhythm(style: int, levels: list[int]) -> bytes:
+    """Draw the music-bar screen with the given bar heights (no reply)."""
+    _check_range("style", style, 0, RHYTHM_STYLES - 1)
+    if len(levels) > RHYTHM_BARS:
+        raise ValueError(f"Give at most {RHYTHM_BARS} levels")
+    for level in levels:
+        _check_range("level", level, 0, RHYTHM_LEVEL_MAX)
+    levels = [*levels, *[0] * (RHYTHM_BARS - len(levels))]
+    return bytes((16, 0, 1, 2, style, *levels))
+
+
+def build_rhythm_animation(style: int, speed: int) -> bytes:
+    """Run the panel's own music animation (no reply)."""
+    _check_range("style", style, 0, 1)
+    _check_range("speed", speed, 0, 7)
+    return bytes((6, 0, 0, 2, speed, style))
+
+
+WEEKDAYS = ("mon", "tue", "wed", "thu", "fri", "sat", "sun")
+
+
+def build_schedule(
+    number: int, hour: int, minute: int, days: list[str], display_on: bool
+) -> bytes:
+    """Store a timed entry on the panel (SendCore.sendTimingData).
+
+    The app's week list is days 1 to 7; bit 0 is always set and day n is
+    bit n.
+    """
+    _check_range("number", number, 0, 255)
+    _check_range("hour", hour, 0, 23)
+    _check_range("minute", minute, 0, 59)
+    if not days:
+        raise ValueError("Give at least one day")
+    mask = 1
+    for day in days:
+        mask |= 1 << (WEEKDAYS.index(day) + 1)
+    return bytes((9, 0, 0x11, 0x80, 1 if display_on else 0, number, mask, hour, minute))
 
 
 def build_firmware_request() -> bytes:

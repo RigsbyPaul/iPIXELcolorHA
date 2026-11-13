@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import datetime as dt
 from functools import partial
 from typing import Any
 
@@ -51,6 +52,7 @@ from .protocol import (
     ResizeMode,
     TextStyle,
     TimerAction,
+    WEEKDAYS,
     DIY_ENTER_CLEAR,
     DIY_ENTER_KEEP,
     build_clock_mode,
@@ -58,6 +60,11 @@ from .protocol import (
     build_delete_all,
     build_delete_slots,
     build_diy_mode,
+    build_program_list,
+    build_scoreboard,
+    build_rhythm,
+    build_rhythm_animation,
+    build_schedule,
     build_diy_pixels,
     draw_points,
     encode_chart,
@@ -86,7 +93,7 @@ class IPixelMessageText(IPixelEntity, TextEntity, RestoreEntity):
     """The last message sent to the matrix. Setting it sends a new one.
 
     It also carries the matrix's actions (display_text, display_image,
-    show_clock, delete_slots, delete_all), which target this entity.
+    show_clock, delete_slots, delete_all, play_slots, scoreboard), which target this entity.
     """
 
     _attr_native_max = 255
@@ -482,10 +489,69 @@ class IPixelMessageText(IPixelEntity, TextEntity, RestoreEntity):
         """Start, pause, resume or reset the matrix's built-in stopwatch."""
         await self._async_command(build_stopwatch(TimerAction[command.upper()]))
 
+    async def async_scoreboard(self, score_1: int = 0, score_2: int = 0) -> None:
+        """Show two scores on the matrix's built-in scoreboard."""
+        await self._async_command(build_scoreboard(score_1, score_2))
+
+    async def async_rhythm(self, levels: list[int], style: int = 0) -> None:
+        """Draw music bars at the given heights."""
+        await self._async_command(self._checked(build_rhythm, style, levels))
+
+    async def async_rhythm_animation(self, style: int = 0, speed: int = 4) -> None:
+        """Run the matrix's own music animation."""
+        await self._async_command(self._checked(build_rhythm_animation, style, speed))
+
+    @staticmethod
+    def _checked(builder, *args) -> bytes:
+        try:
+            return builder(*args)
+        except ValueError as err:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="invalid_value",
+                translation_placeholders={"error": str(err)},
+            ) from err
+
+    async def async_set_schedule(
+        self, time: dt.time, number: int = 0, days: list[str] | None = None, display_on: bool = True
+    ) -> None:
+        """Store a timed entry on the matrix (the app's Timing screen)."""
+        try:
+            command = build_schedule(number, time.hour, time.minute, days or [], display_on)
+        except ValueError as err:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="invalid_value",
+                translation_placeholders={"error": str(err)},
+            ) from err
+        now = dt_util.now()
+        await self._device.async_sync_time(now, self._connect_via())
+        if days and set(days) != set(WEEKDAYS):
+            # Only the clock command carries the date, which day-specific
+            # entries need; it leaves the clock showing.
+            await self._async_command(build_clock_mode(1, True, True, now))
+        await self._async_command(command)
+
     async def async_delete_slots(self, slots: list[int]) -> None:
         """Delete saved programs from the given slots."""
         try:
             command = build_delete_slots(sorted(set(slots)))
+        except ValueError as err:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="invalid_value",
+                translation_placeholders={"error": str(err)},
+            ) from err
+        await self._async_command(command)
+
+    async def async_play_slots(self, slots: list[int]) -> None:
+        """Play the programs saved in the given slots, in turn.
+
+        Slots left out are hidden, not deleted: list them again to bring
+        them back.
+        """
+        try:
+            command = build_program_list(list(dict.fromkeys(slots)))
         except ValueError as err:
             raise ServiceValidationError(
                 translation_domain=DOMAIN,

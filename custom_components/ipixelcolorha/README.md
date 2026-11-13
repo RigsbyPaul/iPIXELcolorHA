@@ -103,6 +103,15 @@ Each panel has these entities:
 | Panel | `light.led_ble_a1b2c3d4` | Turns the panel's LEDs on and off and sets their brightness. |
 | Upside down | `switch.led_ble_a1b2c3d4_upside_down` | Rotates everything by 180 degrees, for panels mounted the other way up. |
 | Sync time | `button.led_ble_a1b2c3d4_sync_time` | Sets the panel's clock to Home Assistant's time. |
+| Resend message | `button.led_ble_a1b2c3d4_resend_message` | Sends the current message again, so changed text settings take effect. |
+| Text effect, Text speed, Rainbow mode | `select.…_text_effect`, `number.…_text_speed`, `number.…_rainbow_mode` | The defaults for typed messages; the same settings as in the [options](#options). |
+| Clock style, Clock 24-hour, Clock shows date | `select.…_clock_style`, `switch.…_clock_24h`, `switch.…_clock_show_date` | Settings for the Show clock button. |
+| Show clock | `button.led_ble_a1b2c3d4_show_clock` | Switches the panel to its built-in clock with those settings. |
+| Panel size, Device type | `sensor.…_panel_size`, `sensor.…_device_type` | Diagnostic: the size and model number the panel reports (read when its clock is set). |
+
+The settings entities only store their value; it is used the next time a
+message or the clock is sent. **Download diagnostics** on the device page
+gives the options, firmware and panel info for a support request.
 
 The panel doesn't report anything back, so these entities show the last
 value set from Home Assistant, not what the panel is actually showing. If you
@@ -126,8 +135,13 @@ Assistant starts; otherwise on the first send.
 | [`ipixelcolorha.show_clock`](#show-clock) | The panel's built-in clock |
 | [`ipixelcolorha.countdown`](#countdown) | The panel's built-in countdown timer |
 | [`ipixelcolorha.stopwatch`](#stopwatch) | The panel's built-in stopwatch |
+| [`ipixelcolorha.set_schedule`](#schedule) | Stored daily on/off times, kept by the panel |
+| [`ipixelcolorha.rhythm`](#music-bars) | Music-visualiser bars at given heights |
+| [`ipixelcolorha.rhythm_animation`](#music-bars) | The panel's own music animation |
+| [`ipixelcolorha.scoreboard`](#scoreboard) | Two scores on the panel's built-in scoreboard |
 | [`ipixelcolorha.draw_pixels`](#draw-pixels) | Single pixels or filled rectangles, live |
 | [`ipixelcolorha.draw_frame`](#draw-frame) | Several colours of rectangles, pixels and text as one picture |
+| [`ipixelcolorha.play_slots`](#save-slots) | Programs saved earlier, one after another |
 | [`ipixelcolorha.delete_slots`, `ipixelcolorha.delete_all`](#save-slots) | Nothing: they clear saved programs |
 
 Every field except the ones marked required can be left out. Values not given
@@ -481,6 +495,63 @@ data:
   command: start
 ```
 
+### Schedule
+
+Stores an on/off time on the panel itself, so it switches the display at that
+time every chosen day even if Home Assistant is down. Entries are numbered;
+sending the same `number` again replaces that entry. The panel clock is set
+first so the times are right. The panel only learns the date from its clock
+screen, so when you pick particular days (not every day) the action also
+switches the panel to the clock; days are Monday to Sunday.
+
+```yaml
+action: ipixelcolorha.set_schedule
+target:
+  entity_id: text.office_matrix_message
+data:
+  number: 0
+  time: "22:30"
+  days: [mon, tue, wed, thu, fri]
+  display_on: false
+```
+
+### Music bars
+
+`rhythm` draws the music visualiser's 11 bars at the heights you give (0 to
+15, left to right); send it again with new heights to move them.
+`rhythm_animation` runs the panel's own animation instead. Each frame only
+shows for a second or two before the saved slots come back, just like in the
+app, so send it repeatedly (about once a second) for as long as you want it.
+The panel doesn't reply to either, so a failed send isn't reported.
+
+```yaml
+action: ipixelcolorha.rhythm
+target:
+  entity_id: text.office_matrix_message
+data:
+  style: 0
+  levels: [3, 8, 15, 10, 5, 2, 7, 12, 9, 4, 1]
+```
+
+### Scoreboard
+
+Shows two scores on the panel's built-in scoreboard. Send it again with new
+numbers to change the scores.
+
+| Field | Values | Default |
+|-------|--------|---------|
+| `score_1` | Left-hand score, 0 to 999 | `0` |
+| `score_2` | Right-hand score, 0 to 999 | `0` |
+
+```yaml
+action: ipixelcolorha.scoreboard
+target:
+  entity_id: text.led_ble_a1b2c3d4_message
+data:
+  score_1: 3
+  score_2: 1
+```
+
 ### Hide loading
 
 While a picture, graph or random-pixel animation is being sent, the panel
@@ -495,6 +566,10 @@ The panel stores what you send in one of 10 numbered program slots. Every
 action writes to slot 1 unless you give a different `save_slot` (or change
 the default in the options), so each new message replaces the last one.
 
+* `ipixelcolorha.play_slots` with `slots: [2, 3]` plays slots 2 and 3 in
+  turn; `slots: [2]` shows just slot 2. Slots you leave out are hidden, not
+  deleted: list them again to bring them back. If none of the listed slots
+  holds anything, the panel plays whatever is saved.
 * `ipixelcolorha.delete_slots` with `slots: [2, 3]` clears the given slots.
 * `ipixelcolorha.delete_all` clears **every** slot, including anything saved
   from the phone app. It can't be undone.

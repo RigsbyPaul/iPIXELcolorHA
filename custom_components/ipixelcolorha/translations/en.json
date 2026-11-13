@@ -108,11 +108,55 @@
     "button": {
       "sync_time": {
         "name": "Sync time"
+      },
+      "show_clock": {
+        "name": "Show clock"
+      },
+      "resend_message": {
+        "name": "Resend message"
+      }
+    },
+    "number": {
+      "text_speed": {
+        "name": "Text speed"
+      },
+      "rainbow_mode": {
+        "name": "Rainbow mode"
+      }
+    },
+    "select": {
+      "text_effect": {
+        "name": "Text effect",
+        "state": {
+          "0": "Fixed",
+          "1": "Scroll left",
+          "2": "Scroll right",
+          "5": "Blink",
+          "6": "Breath",
+          "7": "Snowflakes"
+        }
+      },
+      "clock_style": {
+        "name": "Clock style"
+      }
+    },
+    "sensor": {
+      "panel_size": {
+        "name": "Panel size"
+      },
+      "device_type": {
+        "name": "Device type"
       }
     },
     "switch": {
       "upside_down": {
         "name": "Upside down"
+      },
+      "clock_24h": {
+        "name": "Clock 24-hour"
+      },
+      "clock_show_date": {
+        "name": "Clock shows date"
       }
     },
     "text": {
@@ -380,6 +424,70 @@
         }
       }
     },
+    "set_schedule": {
+      "name": "Set schedule",
+      "description": "Stores a daily on/off time on the matrix itself, so the display switches on or off at that time even when Home Assistant is offline. Also sets the matrix clock. When only some days are picked it also shows the clock, because that is the only way to give the matrix the date.",
+      "fields": {
+        "time": {
+          "name": "Time",
+          "description": "Time of day to switch."
+        },
+        "days": {
+          "name": "Days",
+          "description": "Days the entry applies to. Leave empty for every day."
+        },
+        "display_on": {
+          "name": "Display on",
+          "description": "On turns the display on at that time, off turns it off."
+        },
+        "number": {
+          "name": "Entry number",
+          "description": "Which stored entry to write, 0 to 255. Sending the same number again replaces that entry."
+        }
+      }
+    },
+    "rhythm": {
+      "name": "Music bars",
+      "description": "Draws the music visualiser's bars at the heights you give. The bars show for a second or two, so send it repeatedly (for example from an audio sensor) to keep them up.",
+      "fields": {
+        "levels": {
+          "name": "Levels",
+          "description": "Up to 11 bar heights, 0 to 15, left to right. Missing bars are 0."
+        },
+        "style": {
+          "name": "Style",
+          "description": "Bar style, 0 to 4."
+        }
+      }
+    },
+    "rhythm_animation": {
+      "name": "Music animation",
+      "description": "Runs the matrix's own music animation for a second or two; send it repeatedly to keep it running.",
+      "fields": {
+        "style": {
+          "name": "Style",
+          "description": "Animation style, 0 or 1."
+        },
+        "speed": {
+          "name": "Speed",
+          "description": "Animation speed, 0 to 7."
+        }
+      }
+    },
+    "scoreboard": {
+      "name": "Scoreboard",
+      "description": "Shows two scores on the matrix's built-in scoreboard. Send it again with new numbers to update the scores.",
+      "fields": {
+        "score_1": {
+          "name": "Score 1",
+          "description": "Left-hand score, 0 to 999."
+        },
+        "score_2": {
+          "name": "Score 2",
+          "description": "Right-hand score, 0 to 999."
+        }
+      }
+    },
     "delete_slots": {
       "name": "Delete slots",
       "description": "Deletes the messages or pictures saved in the given slots on the matrix.",
@@ -393,6 +501,16 @@
     "delete_all": {
       "name": "Delete all",
       "description": "Deletes every message and picture saved on the matrix."
+    },
+    "play_slots": {
+      "name": "Play slots",
+      "description": "Plays the messages or pictures saved in the given slots, one after another. Slots left out are hidden, not deleted: list them again to bring them back.",
+      "fields": {
+        "slots": {
+          "name": "Slots",
+          "description": "Slot numbers to play, 1 to 10. Give one slot to show just that one."
+        }
+      }
     }
   },
   "exceptions": {
@@ -440,6 +558,9 @@
     },
     "no_graph_data": {
       "message": "Give one of values, points or series."
+    },
+    "no_message": {
+      "message": "There is no message to send again yet."
     }
   }
 }

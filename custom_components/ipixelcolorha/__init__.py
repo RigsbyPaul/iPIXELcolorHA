@@ -20,15 +20,20 @@ from homeassistant.helpers import (
     service,
 )
 from homeassistant.helpers.typing import ConfigType
+from homeassistant.util import dt as dt_util
 
 from .const import (
     ATTR_ANCHOR,
     ATTR_BACKGROUND_COLOR,
     ATTR_BLOCK_SIZE,
+    ATTR_DISPLAY_ON,
     ATTR_CLEAR,
     ATTR_COLOR,
     ATTR_COLORS,
     ATTR_COMMAND,
+    ATTR_DAYS,
+    ATTR_LEVELS,
+    ATTR_STYLE,
     ATTR_DURATION,
     ATTR_EFFECT,
     ATTR_FILE,
@@ -39,11 +44,14 @@ from .const import (
     ATTR_MAXIMUM,
     ATTR_MESSAGE,
     ATTR_MINUTES,
+    ATTR_NUMBER,
     ATTR_POINTS,
     ATTR_RAINBOW_MODE,
     ATTR_RECTANGLES,
     ATTR_RESIZE,
     ATTR_SAVE_SLOT,
+    ATTR_SCORE_1,
+    ATTR_SCORE_2,
     ATTR_SECONDS,
     ATTR_SERIES,
     ATTR_SHOW_DATE,
@@ -53,6 +61,7 @@ from .const import (
     ATTR_STEPS,
     ATTR_STYLE,
     ATTR_TEXT,
+    ATTR_TIME,
     ATTR_URL,
     ATTR_USE_24H,
     ATTR_VALUES,
@@ -79,6 +88,11 @@ from .const import (
     SERVICE_DISPLAY_TEXT,
     SERVICE_DRAW_FRAME,
     SERVICE_DRAW_PIXELS,
+    SERVICE_PLAY_SLOTS,
+    SERVICE_SCOREBOARD,
+    SERVICE_RHYTHM,
+    SERVICE_RHYTHM_ANIMATION,
+    SERVICE_SET_SCHEDULE,
     SERVICE_SHOW_CLOCK,
     SERVICE_STOPWATCH,
 )
@@ -96,8 +110,13 @@ from .protocol import (
     RANDOM_PIXEL_COLORS,
     RANDOM_PIXEL_DURATIONS,
     RANDOM_PIXEL_STEPS,
+    SCORE_MAX,
     TEXT_ANCHORS,
     TEXT_EFFECTS,
+    RHYTHM_BARS,
+    RHYTHM_LEVEL_MAX,
+    RHYTHM_STYLES,
+    WEEKDAYS,
     FirmwareInfo,
     PlotStyle,
     ResizeMode,
@@ -106,7 +125,15 @@ from .protocol import (
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = [Platform.BUTTON, Platform.LIGHT, Platform.SWITCH, Platform.TEXT]
+PLATFORMS = [
+    Platform.BUTTON,
+    Platform.LIGHT,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+    Platform.TEXT,
+]
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
@@ -271,6 +298,38 @@ DELETE_SLOTS_SCHEMA = {
     ),
 }
 
+PLAY_SLOTS_SCHEMA = DELETE_SLOTS_SCHEMA
+
+RHYTHM_SCHEMA = {
+    vol.Optional(ATTR_STYLE, default=0): vol.All(vol.Coerce(int), vol.Range(0, RHYTHM_STYLES - 1)),
+    vol.Required(ATTR_LEVELS): vol.All(
+        vol.EnsureList(),
+        [vol.All(vol.Coerce(int), vol.Range(0, RHYTHM_LEVEL_MAX))],
+        vol.Length(max=RHYTHM_BARS),
+    ),
+}
+RHYTHM_ANIMATION_SCHEMA = {
+    vol.Optional(ATTR_STYLE, default=0): vol.All(vol.Coerce(int), vol.Range(0, 1)),
+    vol.Optional(ATTR_SPEED, default=4): vol.All(vol.Coerce(int), vol.Range(0, 7)),
+}
+SET_SCHEDULE_SCHEMA = {
+    vol.Optional(ATTR_NUMBER, default=0): vol.All(vol.Coerce(int), vol.Range(0, 255)),
+    vol.Required(ATTR_TIME): cv.time,
+    vol.Optional(ATTR_DAYS, default=list(WEEKDAYS)): vol.All(
+        vol.EnsureList(), [vol.In(WEEKDAYS)], vol.Length(min=1)
+    ),
+    vol.Optional(ATTR_DISPLAY_ON, default=True): cv.boolean,
+}
+
+SCOREBOARD_SCHEMA = {
+    vol.Optional(ATTR_SCORE_1, default=0): vol.All(
+        vol.Coerce(int), vol.Range(0, SCORE_MAX)
+    ),
+    vol.Optional(ATTR_SCORE_2, default=0): vol.All(
+        vol.Coerce(int), vol.Range(0, SCORE_MAX)
+    ),
+}
+
 # (action, schema, entity method)
 ACTIONS = (
     (SERVICE_DISPLAY_TEXT, DISPLAY_TEXT_SCHEMA, "async_display_text"),
@@ -288,6 +347,11 @@ ACTIONS = (
     (SERVICE_STOPWATCH, STOPWATCH_SCHEMA, "async_stopwatch"),
     (SERVICE_DELETE_SLOTS, DELETE_SLOTS_SCHEMA, "async_delete_slots"),
     (SERVICE_DELETE_ALL, {}, "async_delete_all"),
+    (SERVICE_PLAY_SLOTS, PLAY_SLOTS_SCHEMA, "async_play_slots"),
+    (SERVICE_SCOREBOARD, SCOREBOARD_SCHEMA, "async_scoreboard"),
+    (SERVICE_SET_SCHEDULE, SET_SCHEDULE_SCHEMA, "async_set_schedule"),
+    (SERVICE_RHYTHM, RHYTHM_SCHEMA, "async_rhythm"),
+    (SERVICE_RHYTHM_ANIMATION, RHYTHM_ANIMATION_SCHEMA, "async_rhythm_animation"),
 )
 
 type IPixelConfigEntry = ConfigEntry[IPixelDevice]
@@ -380,6 +444,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: IPixelConfigEntry) -> bo
 async def _async_read_firmware(device: IPixelDevice, connect_via: str | None) -> None:
     try:
         await device.async_read_firmware(connect_via)
+        # Also reports the panel's size and model for the diagnostic sensors.
+        await device.async_sync_time(dt_util.now(), connect_via)
     except HomeAssistantError as err:
         _LOGGER.debug("%s: could not read firmware: %s", device.name, err)
 

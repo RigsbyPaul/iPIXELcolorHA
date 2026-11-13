@@ -11,7 +11,9 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 
 from . import IPixelConfigEntry
+from .const import CONF_CLOCK_24H, CONF_CLOCK_SHOW_DATE
 from .entity import IPixelEntity
+from .option_entity import IPixelOptionEntity
 from .protocol import build_upside_down
 
 PARALLEL_UPDATES = 1
@@ -22,8 +24,35 @@ async def async_setup_entry(
     entry: IPixelConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Add the upside-down switch."""
-    async_add_entities([IPixelUpsideDownSwitch(entry)])
+    """Add the upside-down and clock switches."""
+    async_add_entities(
+        [
+            IPixelUpsideDownSwitch(entry),
+            IPixelOptionSwitch(entry, "clock_24h", CONF_CLOCK_24H),
+            IPixelOptionSwitch(entry, "clock_show_date", CONF_CLOCK_SHOW_DATE),
+        ]
+    )
+
+
+class IPixelOptionSwitch(IPixelOptionEntity, SwitchEntity):
+    """A clock setting kept in the options; used by the Show clock button."""
+
+    def __init__(self, entry: IPixelConfigEntry, key: str, option: str) -> None:
+        """Initialise the switch."""
+        super().__init__(entry, key, option, True)
+
+    @property
+    def is_on(self) -> bool:
+        """Return the stored value."""
+        return bool(self._value)
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Store on."""
+        await self._async_store(True)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Store off."""
+        await self._async_store(False)
 
 
 class IPixelUpsideDownSwitch(IPixelEntity, SwitchEntity, RestoreEntity):
